@@ -27,7 +27,7 @@ extension Request {
     }
 
     func request() throws -> URLRequest {
-        guard let var components = URLComponents(string: host) else { throw NetworkError.invalidURL }
+        guard let components = URLComponents(string: host) else { throw NetworkError.invalidURL }
         components.path = path
 
         if !urlParams.isEmpty {

@@ -11,9 +11,13 @@ public protocol Request {
     var host: String { get }
     var path: String { get }
     var requestType: RequestType { get }
+    var params: [String: Any]  { get }
+    var urlParams: [String: String?] { get }
+    var headers: [String: String] { get }
 }
 
 extension Request {
+
     var params: [String: Any] {
         [:]
     }

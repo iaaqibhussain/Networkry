@@ -7,11 +7,11 @@
 
 import Foundation
 
-public protocol NetworkyInterceptor {
+protocol NetworkyInterceptor {
     func addRequest(interceptor: Interceptor)
 }
 
-public protocol NetworkryProtocol: NetworkyInterceptor {
+public protocol NetworkryProtocol {
     func execute(
         with request: Request,
         completionHandler: @escaping (Result<Data, NetworkError>) -> ()
@@ -24,8 +24,6 @@ public protocol NetworkryProtocol: NetworkyInterceptor {
 
     static var shared: NetworkryProtocol { get }
 }
-
-
 
 public final class Networkry: NSObject, NetworkryProtocol {
     private let apiManager: ApiManager

@@ -35,7 +35,8 @@ final class ApiManagerImpl: ApiManager {
         do {
             let request = try request.request()
             let interceptedRequest = interceptor?.addInterceptor(request: request) ?? request
-            dataTask(request: interceptedRequest, completionHandler: completionHandler)
+            let task = dataTask(request: interceptedRequest, completionHandler: completionHandler)
+            task.resume()
         } catch {
             completionHandler(.failure(.error(error)))
         }
@@ -50,7 +51,7 @@ private extension ApiManagerImpl {
     func dataTask(
         request: URLRequest,
         completionHandler: @escaping (Result<Data, NetworkError>) -> ()
-    ) {
+    ) -> URLSessionDataTask {
         urlSession.dataTask(with: request) { data, response, error in
             guard let httpResponse = response as? HTTPURLResponse,
                   httpResponse.statusCode == 200 else { completionHandler(.failure(NetworkError.invalidServerResponse))

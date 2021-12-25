@@ -27,8 +27,7 @@ extension Request {
     }
 
     func request() throws -> URLRequest {
-        var components = URLComponents()
-        components.host = host
+        guard let var components = URLComponents(string: host) else { throw NetworkError.invalidURL }
         components.path = path
 
         if !urlParams.isEmpty {
@@ -43,8 +42,6 @@ extension Request {
         if !headers.isEmpty {
             urlRequest.allHTTPHeaderFields = headers
         }
-
-        urlRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
 
         if !params.isEmpty {
             urlRequest.httpBody = try JSONSerialization.data(withJSONObject: params)

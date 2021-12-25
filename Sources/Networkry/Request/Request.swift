@@ -28,7 +28,6 @@ extension Request {
 
     func request() throws -> URLRequest {
         var components = URLComponents()
-        components.scheme = "https"
         components.host = host
         components.path = path
 

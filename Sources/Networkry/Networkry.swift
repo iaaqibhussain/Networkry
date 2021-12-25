@@ -7,23 +7,31 @@
 
 import Foundation
 
-public protocol NetworkryProtocol {
+public protocol NetworkyInterceptor {
+    func addRequest(interceptor: Interceptor)
+}
+
+public protocol NetworkryProtocol: NetworkyInterceptor {
     func execute(
         with request: Request,
-        completionHandler: @escaping DataCompletionHandler
+        completionHandler: @escaping (Result<Data, NetworkError>) -> ()
     )
 
     func execute<T: Decodable>(
         with request: Request,
         completionHandler: @escaping (Result<T, NetworkError>) -> ()
     )
+
+    static var shared: NetworkryProtocol { get }
 }
 
-public final class Networkry: NetworkryProtocol {
+
+
+public final class Networkry: NSObject, NetworkryProtocol {
     private let apiManager: ApiManager
     private let dataParser: DecodableDataParser
 
-    static let shared: NetworkryProtocol = Networkry()
+    public static let shared: NetworkryProtocol = Networkry()
 
     private init(
         apiManager: ApiManager = ApiManagerImpl(),
@@ -35,7 +43,7 @@ public final class Networkry: NetworkryProtocol {
 
     public func execute(
         with request: Request,
-        completionHandler: @escaping DataCompletionHandler
+        completionHandler: @escaping (Result<Data, NetworkError>) -> ()
     ) {
         apiManager.execute(
             with: request,
@@ -60,5 +68,11 @@ public final class Networkry: NetworkryProtocol {
                 completionHandler(.failure(error))
             }
         }
+    }
+}
+
+extension Networkry: NetworkyInterceptor {
+    public func addRequest(interceptor: Interceptor) {
+        apiManager.addRequest(interceptor: interceptor)
     }
 }

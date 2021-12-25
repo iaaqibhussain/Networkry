@@ -1,5 +1,5 @@
 //
-//  DataParser.swift
+//  DecodableDataParser.swift
 //  
 //
 //  Created by Aaqib Hussain on 19.12.21.

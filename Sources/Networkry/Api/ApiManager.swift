@@ -7,17 +7,22 @@
 
 import Foundation
 
-public typealias DataCompletionHandler = (Result<Data, NetworkError>) -> ()
+public protocol Interceptor {
+    func addInterceptor(request: URLRequest) -> URLRequest
+}
 
 protocol ApiManager {
     func execute(
         with request: Request,
-        completionHandler: @escaping DataCompletionHandler
+        completionHandler: @escaping (Result<Data, NetworkError>) -> ()
     )
+
+    func addRequest(interceptor: Interceptor)
 }
 
 final class ApiManagerImpl: ApiManager {
     private let urlSession: URLSession
+    private var interceptor: Interceptor?
 
     init(urlSession: URLSession = URLSession.shared) {
         self.urlSession = urlSession
@@ -25,21 +30,26 @@ final class ApiManagerImpl: ApiManager {
 
     func execute(
         with request: Request,
-        completionHandler: @escaping DataCompletionHandler
+        completionHandler: @escaping (Result<Data, NetworkError>) -> ()
     ) {
         do {
             let request = try request.request()
-            dataTask(request: request, completionHandler: completionHandler)
+            let interceptedRequest = interceptor?.addInterceptor(request: request) ?? request
+            dataTask(request: interceptedRequest, completionHandler: completionHandler)
         } catch {
             completionHandler(.failure(.error(error)))
         }
+    }
+
+    func addRequest(interceptor: Interceptor) {
+        self.interceptor = interceptor
     }
 }
 
 private extension ApiManagerImpl {
     func dataTask(
         request: URLRequest,
-        completionHandler: @escaping DataCompletionHandler
+        completionHandler: @escaping (Result<Data, NetworkError>) -> ()
     ) {
         urlSession.dataTask(with: request) { data, response, error in
             guard let httpResponse = response as? HTTPURLResponse,

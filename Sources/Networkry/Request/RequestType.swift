@@ -5,7 +5,7 @@
 //  Created by Aaqib Hussain on 19.12.21.
 //
 
-enum RequestType: String {
+public enum RequestType: String {
   case GET
   case POST
   case PUT

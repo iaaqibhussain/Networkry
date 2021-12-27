@@ -7,7 +7,7 @@
 
 import Foundation
 
-protocol NetworkyInterceptor {
+public protocol NetworkyInterceptor {
     func addRequest(interceptor: Interceptor)
 }
 

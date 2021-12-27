@@ -15,16 +15,20 @@ public protocol Request {
 
 public extension Request {
 
-    var params: [String: Any] {
+    public var params: [String: Any] {
         [:]
     }
 
-    var urlParams: [String: String?] {
+    public var urlParams: [String: String?] {
         [:]
     }
 
-    var headers: [String: String] {
+    public var headers: [String: String] {
         [:]
+    }
+
+    public var includeInterceptor: Bool {
+        true
     }
 
     func request() throws -> URLRequest {

@@ -7,11 +7,15 @@
 
 import Foundation
 
-public final class Networkry: NSObject {
+public final class Networkry {
     private let apiManager: ApiManager
-    private let dataParser: DecodableDataParser
+    private lazy var dataParser: DecodableDataParser = DecodableDataParserImpl()
 
-    private init(
+    public init(apiManager: ApiManager = ApiManagerImpl()) {
+        self.apiManager = apiManager
+    }
+
+    public init(
         apiManager: ApiManager = ApiManagerImpl(),
         dataParser: DecodableDataParser = DecodableDataParserImpl()
     ) {

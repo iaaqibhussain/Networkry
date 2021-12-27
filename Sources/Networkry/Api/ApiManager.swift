@@ -11,7 +11,7 @@ public protocol Interceptor {
     func addInterceptor(request: URLRequest) -> URLRequest
 }
 
-protocol ApiManager {
+public protocol ApiManager {
     func execute(
         with request: Request,
         completionHandler: @escaping (Result<Data, NetworkError>) -> ()
@@ -20,15 +20,15 @@ protocol ApiManager {
     func addRequest(interceptor: Interceptor)
 }
 
-final class ApiManagerImpl: ApiManager {
+public final class ApiManagerImpl: ApiManager {
     private let urlSession: URLSession
     private var interceptor: Interceptor?
 
-    init(urlSession: URLSession = URLSession.shared) {
+    public init(urlSession: URLSession = URLSession.shared) {
         self.urlSession = urlSession
     }
 
-    func execute(
+    public func execute(
         with request: Request,
         completionHandler: @escaping (Result<Data, NetworkError>) -> ()
     ) {
@@ -42,7 +42,7 @@ final class ApiManagerImpl: ApiManager {
         }
     }
 
-    func addRequest(interceptor: Interceptor) {
+    public func addRequest(interceptor: Interceptor) {
         self.interceptor = interceptor
     }
 }

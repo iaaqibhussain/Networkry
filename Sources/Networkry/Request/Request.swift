@@ -15,19 +15,19 @@ public protocol Request {
 
 public extension Request {
 
-    public var params: [String: Any] {
+    var params: [String: Any] {
         [:]
     }
 
-    public var urlParams: [String: String?] {
+    var urlParams: [String: String?] {
         [:]
     }
 
-    public var headers: [String: String] {
+    var headers: [String: String] {
         [:]
     }
 
-    public var includeInterceptor: Bool {
+    var includeInterceptor: Bool {
         true
     }
 

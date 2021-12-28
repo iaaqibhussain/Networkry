@@ -11,6 +11,10 @@ public final class Networkry {
     private let apiManager: ApiManager
     private lazy var dataParser: DecodableDataParser = DecodableDataParserImpl()
 
+    public convenience init() {
+        self.init(apiManager: ApiManagerImpl())
+    }
+
     public init(apiManager: ApiManager = ApiManagerImpl()) {
         self.apiManager = apiManager
     }
